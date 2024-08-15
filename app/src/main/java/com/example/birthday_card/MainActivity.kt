@@ -5,16 +5,24 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -33,11 +41,11 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    GreetingText(
-                        message = "Happy Birthday Eli!",
-                        from = "From Tahir",
-                        modifier = Modifier.padding(8.dp)
-                    )
+                      GreetingImage(
+                          message = "Happy Birthday Eli!",
+                          from = "From Tahir",
+                          modifier = Modifier
+                      )
                 }
             }
         }
@@ -61,18 +69,25 @@ fun GreetingText(message: String, from: String, modifier: Modifier = Modifier) {
             text = message,
             fontSize = 100.sp, // The scalable pixels (SP) is a unit of measure for the font size
             lineHeight = 116.sp,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
+            color = Color.Magenta,
+            modifier = Modifier
+                .alpha(.7F)
         )
         Text(
             text = from,
             fontSize = 36.sp,
+            color = Color.Yellow,
             modifier = Modifier
                 .padding(16.dp)
                 .align(alignment = Alignment.End)
+                .background(color = Color.Black)
         )
     }
 }
 
+@Composable
+fun GreetingImage(message: String, from: String, modifier: Modifier) {
 /* Resources can be accessed with resource IDs that are generated in your project's R class.
    Syntax: R.drawable.graphic
     {
@@ -81,20 +96,37 @@ fun GreetingText(message: String, from: String, modifier: Modifier = Modifier) {
        graphic = Resource ID (mostly same as filename)
     }
 */
-@Composable
-fun GreetingImage(message: String, from: String, modifier: Modifier) {
     val image = painterResource(id = R.drawable.androidparty)
-    Image(
-        painter = image,
-        contentDescription = null
-    )
+    /*
+        Use Box layout to stack elements on top of one another.
+        Box layout also lets you configure the specific alignment
+        of the elements that it contains.
+    */
+    Box(modifier) {
+        Image(
+            painter = image,
+            /*
+                Content description essential for google talkback for disabled
+                Why null? Cuz this image will be in the background
+            */
+            contentDescription = null,
+            contentScale = ContentScale.Crop, // For removing bottom whitespace by cropping
+            alpha = 0.5F // opacity of image
+        )
+        GreetingText(
+            message = message,
+            from = from,
+            modifier = Modifier
+                .fillMaxSize() // This will center the whole GreetingText block
+                .padding(8.dp)
+        )
+    }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun BirthdayCardPreview() {
     Birthday_CardTheme {
-        //GreetingText(message = "Happy Birthday Eli!", from = "From Tahir")
         GreetingImage(message = "Happy Birthday Eli!", from = "From Tahir", modifier = Modifier)
     }
 }
