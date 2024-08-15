@@ -24,6 +24,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -42,8 +43,10 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                       GreetingImage(
-                          message = "Happy Birthday Eli!",
-                          from = "From Tahir",
+                          // Extracting string resource helps in translation into other lang
+                          // app -> res -> values -> strings.xml
+                          message = stringResource(R.string.happy_birthday_text),
+                          from = stringResource(R.string.from_signature_text),
                           modifier = Modifier
                       )
                 }
@@ -80,7 +83,7 @@ fun GreetingText(message: String, from: String, modifier: Modifier = Modifier) {
             color = Color.Yellow,
             modifier = Modifier
                 .padding(16.dp)
-                .align(alignment = Alignment.End)
+                .align(alignment = Alignment.CenterHorizontally)
                 .background(color = Color.Black)
         )
     }
